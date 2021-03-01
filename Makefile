@@ -30,7 +30,18 @@ build: gen-install-options lint check-links
 .PHONY: verify-install-options
 verify-install-options: gen-install-options
 	./tools/check-git-status.sh
+.PHONY: update-docs
+update-docs:
+	./tools/update-docs.sh
 .PHONY: clean
 clean:
 	-rm -r out
 	-rm -r public
+docker-serve:
+	docker run --rm -v $(shell pwd):/work -p 1313:1313 -it --entrypoint /bin/bash quay.io/maistra-dev/maistra-builder:2.0 -c 'make serve'
+docker-lint:
+	docker run --rm -v $(shell pwd):/work -p 1313:1313 -it --entrypoint /bin/bash quay.io/maistra-dev/maistra-builder:2.0 -c 'make lint'
+docker-check-links:
+	docker run --rm -v $(shell pwd):/work -p 1313:1313 -it --entrypoint /bin/bash quay.io/maistra-dev/maistra-builder:2.0 -c 'make check-links'
+docker-build:
+	docker run --rm -v $(shell pwd):/work -p 1313:1313 -it --entrypoint /bin/bash quay.io/maistra-dev/maistra-builder:2.0 -c 'make build'
